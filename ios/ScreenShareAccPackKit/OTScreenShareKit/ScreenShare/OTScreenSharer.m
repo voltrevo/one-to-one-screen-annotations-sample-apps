@@ -14,10 +14,9 @@ static NSString * const kLogComponentIdentifier = @"screensharingAccPack";
 static NSString * const KLogClientVersion = @"ios-vsol-1.0.0";
 static NSString * const KLogActionInitialize = @"Init";
 static NSString * const KLogActionStart = @"Start";
-static NSString * const KLogActionStop = @"Stop";
+static NSString * const KLogActionEnd = @"End";
 static NSString * const KLogActionEnableAudioScreensharing = @"EnableScreensharingAudio";
 static NSString * const KLogActionDisableAudioScreensharing = @"DisableScreensharingAudio";
-
 static NSString * const KLogVariationAttempt = @"Attempt";
 static NSString * const KLogVariationSuccess = @"Success";
 static NSString * const KLogVariationFailure = @"Failure";
@@ -94,7 +93,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void)disconnect {
-    [OTKLogger logEventAction:KLogActionStop
+    [OTKLogger logEventAction:KLogActionEnd
                     variation:KLogVariationAttempt
                    completion:nil];
     if (self.publisher) {
@@ -119,12 +118,12 @@ static NSString * const KLogVariationFailure = @"Failure";
     
     NSError *disconnectError = [OTAcceleratorSession deregisterWithAccePack:self];
     if (!disconnectError) {
-        [OTKLogger logEventAction:KLogActionStop
+        [OTKLogger logEventAction:KLogActionEnd
                         variation:KLogVariationSuccess
                        completion:nil];
     }
     else {
-        [OTKLogger logEventAction:KLogActionStop
+        [OTKLogger logEventAction:KLogActionEnd
                         variation:KLogVariationFailure
                        completion:nil];
     }
