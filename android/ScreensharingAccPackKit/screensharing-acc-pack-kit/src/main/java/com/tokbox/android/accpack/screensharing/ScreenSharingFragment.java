@@ -241,7 +241,7 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
         mAnalytics = new OTKAnalytics(mAnalyticsData);
 
         checkSessionInfo();
-        addLogEvent(OpenTokConfig.LOG_ACTION_INITIALIZE, OpenTokConfig.LOG_VARIATION_ATTEMPT);
+
         addLogEvent(OpenTokConfig.LOG_ACTION_INITIALIZE, OpenTokConfig.LOG_VARIATION_SUCCESS);
     }
 
@@ -313,11 +313,9 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
 
         //add logging info
         if (annotationsEnabled){
-            addLogEvent(OpenTokConfig.LOG_ACTION_ENABLE_ANNOTATIONS, OpenTokConfig.LOG_VARIATION_ATTEMPT);
             addLogEvent(OpenTokConfig.LOG_ACTION_ENABLE_ANNOTATIONS, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
         else {
-            addLogEvent(OpenTokConfig.LOG_ACTION_DISABLE_ANNOTATIONS, OpenTokConfig.LOG_VARIATION_ATTEMPT);
             addLogEvent(OpenTokConfig.LOG_ACTION_DISABLE_ANNOTATIONS, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
     }
@@ -347,12 +345,10 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
 
         //add logging info
         if (enabled){
-            addLogEvent(OpenTokConfig.LOG_ACTION_ENABLE_AUDIO_SCREENSHARING, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-            addLogEvent(OpenTokConfig.LOG_ACTION_ENABLE_AUDIO_SCREENSHARING, OpenTokConfig.LOG_VARIATION_SUCCESS);
+            addLogEvent(OpenTokConfig.LOG_ACTION_ENABLE_SCREENSHARING_AUDIO, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
         else {
-            addLogEvent(OpenTokConfig.LOG_ACTION_DISABLE_AUDIO_SCREENSHARING, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-            addLogEvent(OpenTokConfig.LOG_ACTION_DISABLE_AUDIO_SCREENSHARING, OpenTokConfig.LOG_VARIATION_SUCCESS);
+            addLogEvent(OpenTokConfig.LOG_ACTION_DISABLE_SCREENSHARING_AUDIO, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
     }
 
@@ -375,12 +371,8 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
     @Override
     public void onDestroy() {
         super.onDestroy();
-        addLogEvent(OpenTokConfig.LOG_ACTION_DESTROY, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-
         tearDownMediaProjection();
-
         addLogEvent(OpenTokConfig.LOG_ACTION_DESTROY, OpenTokConfig.LOG_VARIATION_SUCCESS);
-
     }
 
     @Override
@@ -538,7 +530,7 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
     protected void onScreenSharingStopped(){
         if ( mListener != null ){
             mListener.onScreenSharingStopped();
-            addLogEvent(OpenTokConfig.LOG_ACTION_STOP, OpenTokConfig.LOG_VARIATION_SUCCESS);
+            addLogEvent(OpenTokConfig.LOG_ACTION_END, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
     }
 
