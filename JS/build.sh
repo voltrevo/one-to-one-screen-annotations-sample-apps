@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 PUBLIC="../../sample-app/public"
 SRC_PATH="../opentok.js-ss-annotation/src/"
@@ -55,4 +56,3 @@ else
 	echo "Please run this script from 'js-screensharing-annotation'."
 	exit 1
 fi
-
