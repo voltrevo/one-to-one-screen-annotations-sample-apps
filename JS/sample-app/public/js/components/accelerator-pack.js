@@ -169,8 +169,7 @@
     var canvasContainer = document.getElementById('videoHolderSharedScreen');
     var videoContainer = document.getElementById('videoContainer');
     var annotationOptions = {
-      canvasContainer: canvasContainer,
-      viewingSharedScreen: true
+      canvasContainer: canvasContainer
     };
     _annotation.start(_session, annotationOptions)
       .then(function () {
