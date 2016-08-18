@@ -23,8 +23,8 @@
 
   // Options hash
   var _options = {
-    apiKey: '',
-    sessionId: '',
+    apiKey: '', // Replace with your OpenTok API key
+    sessionId: '', // Replace with a generated Session ID
     token: '',
     screensharing: {
       extensionID: '',
@@ -53,6 +53,7 @@
         $('#videoHolderSharedScreen').show();
         $('#toolbar').show();
         $('#feedControls').addClass('viewing-shared-screen');
+        $('#otsWidget').addClass('viewing-shared-screen');
       }
 
     } else {
@@ -61,6 +62,7 @@
       $('#videoHolderBig').show();
       $('#videoHolderSharedScreen').hide();
       $('#feedControls').removeClass('viewing-shared-screen');
+      $('#otsWidget').removeClass('viewing-shared-screen');
 
     }
 
