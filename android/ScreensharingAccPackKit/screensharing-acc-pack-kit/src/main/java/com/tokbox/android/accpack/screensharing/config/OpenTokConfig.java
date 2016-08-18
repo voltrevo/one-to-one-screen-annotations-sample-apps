@@ -4,7 +4,7 @@ public class OpenTokConfig {
 
     // For internal use only. Please do not modify or remove this code.
     public static final String LOG_CLIENT_VERSION = "android-vsol-1.0.0";
-    public static final String LOG_COMPONENTID = "screensharingAccPack";
+    public static final String LOG_COMPONENTID = "screenSharingAccPack";
     public static final String LOG_ACTION_INITIALIZE = "Init";
     public static final String LOG_ACTION_DESTROY = "Destroy";
     public static final String LOG_ACTION_START = "Start";
