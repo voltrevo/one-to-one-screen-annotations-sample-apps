@@ -10,7 +10,7 @@
 
 #import "OTScreenSharer_Private.h"
 
-static NSString * const kLogComponentIdentifier = @"screensharingAccPack";
+static NSString * const kLogComponentIdentifier = @"screenSharingAccPack";
 static NSString * const KLogClientVersion = @"ios-vsol-1.0.0";
 static NSString * const KLogActionInitialize = @"Init";
 static NSString * const KLogActionStart = @"Start";
@@ -41,7 +41,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 + (void)setOpenTokApiKey:(NSString *)apiKey
                sessionId:(NSString *)sessionId
                    token:(NSString *)token; {
-    
+
     [OTAcceleratorSession setOpenTokApiKey:apiKey sessionId:sessionId token:token];
     [OTScreenSharer sharedInstance];
 }
@@ -51,9 +51,9 @@ static NSString * const KLogVariationFailure = @"Failure";
                                    source:[[NSBundle mainBundle] bundleIdentifier]
                               componentId:kLogComponentIdentifier
                                      guid:[[NSUUID UUID] UUIDString]];
-    
+
     [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationAttempt completion:nil];
-    
+
     static OTScreenSharer *sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -61,7 +61,7 @@ static NSString * const KLogVariationFailure = @"Failure";
         sharedInstance.session = [OTAcceleratorSession getAcceleratorPackSession];
         [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationSuccess completion:nil];
     });
-    
+
     if (!sharedInstance) {
         [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationFailure completion:nil];
     }
@@ -87,7 +87,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 
 - (void)connectWithView:(UIView *)view
                 handler:(ScreenShareBlock)handler {
-    
+
     self.handler = handler;
     [self connectWithView:view];
 }
@@ -97,7 +97,7 @@ static NSString * const KLogVariationFailure = @"Failure";
                     variation:KLogVariationAttempt
                    completion:nil];
     if (self.publisher) {
-        
+
         OTError *error = nil;
         [self.publisher.view removeFromSuperview];
         [self.session unpublish:self.publisher error:&error];
@@ -105,9 +105,9 @@ static NSString * const KLogVariationFailure = @"Failure";
             NSLog(@"%@", error.localizedDescription);
         }
     }
-    
+
     if (self.subscriber) {
-        
+
         OTError *error = nil;
         [self.subscriber.view removeFromSuperview];
         [self.session unsubscribe:self.subscriber error:&error];
@@ -115,7 +115,7 @@ static NSString * const KLogVariationFailure = @"Failure";
             NSLog(@"%@", error.localizedDescription);
         }
     }
-    
+
     NSError *disconnectError = [OTAcceleratorSession deregisterWithAccePack:self];
     if (!disconnectError) {
         [OTKLogger logEventAction:KLogActionEnd
@@ -136,11 +136,11 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void)notifiyAllWithSignal:(ScreenShareSignal)signal error:(NSError *)error {
-    
+
     if (self.handler) {
         self.handler(signal, error);
     }
-    
+
     if (self.delegate) {
         [self.delegate screenShareWithSignal:signal error:error];
     }
@@ -149,7 +149,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 - (void) sessionDidConnect:(OTSession *)session {
     //Init otkanalytics. Internal use
     [OTKLogger setSessionId:session.sessionId connectionId:session.connection.connectionId partnerId:@([self.session.apiKey integerValue])];
-    
+
     if (!self.publisher) {
         NSString *deviceName = [UIDevice currentDevice].name;
         self.publisher = [[OTPublisher alloc] initWithDelegate:self
@@ -160,7 +160,7 @@ static NSString * const KLogVariationFailure = @"Failure";
         self.publisher.audioFallbackEnabled = NO;
         [self.publisher setVideoCapture:self.screenCapture];
     }
-    
+
     OTError *error;
     [self.session publish:self.publisher error:&error];
     if (error) {
@@ -177,14 +177,14 @@ static NSString * const KLogVariationFailure = @"Failure";
 - (void) sessionDidDisconnect:(OTSession *)session {
     self.publisher = nil;
     self.subscriber = nil;
-    
+
     self.isScreenSharing = NO;
     [self notifiyAllWithSignal:ScreenShareSignalSessionDidDisconnect
                          error:nil];
 }
 
 - (void)session:(OTSession *)session streamCreated:(OTStream *)stream {
-    
+
     OTError *error;
     self.subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
     self.subscriber.viewScaleBehavior = OTVideoViewScaleBehaviorFit;
@@ -194,11 +194,11 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void) session:(OTSession *)session streamDestroyed:(OTStream *)stream {
-    
+
     if (self.subscriber.stream && [self.subscriber.stream.streamId isEqualToString:stream.streamId]) {
         [self.subscriber.view removeFromSuperview];
         self.subscriber = nil;
-        
+
         [self notifiyAllWithSignal:ScreenShareSignalSessionStreamDestroyed
                              error:nil];
     }
