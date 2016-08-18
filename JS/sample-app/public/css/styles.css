@@ -139,7 +139,7 @@ button {
     z-index: 12;
 }
 
-.video-control {
+.ots-video-control {
     height: 50px;
     width: 50px;
     background-repeat: no-repeat;
@@ -147,75 +147,75 @@ button {
     cursor: pointer;
 }
 
-.video-control.circle {
+.ots-video-control.circle {
     border: 1px solid rgba(128, 128, 128, .5);
     border-radius: 50%;
 }
 
-.video-control.circle:hover {
+.ots-video-control.circle:hover {
     border: 1px solid rgba(128, 128, 128, 1);
 }
 
-.video-control.call {
+.ots-video-control.call {
     background-color: rgba(87, 193, 228, .85);
     background-image: url("../images/icon/call.png");
     margin: 0 15px;
 }
 
-.video-control.call:hover {
+.ots-video-control.call:hover {
     background-color: rgba(87, 193, 228, 1);
 }
 
-.video-control.call.active {
+.ots-video-control.call.active {
     background-color: red;
     background-image: url("../images/icon/hang-up.png");
 }
 /**/
 
-.video-control.share-screen {
+.ots-video-control.share-screen {
   margin-left: 10px;
   background-image: url("../images/icon/screen-share.png");
 }
 
-.video-control.share-screen.disabled,
-.video-control.share-screen:hover {
+.ots-video-control.share-screen.disabled,
+.ots-video-control.share-screen:hover {
   background-image: url("../images/icon/screen-share.png");
 }
-.video-control.share-screen.active {
+.ots-video-control.share-screen.active {
   background-color: red;
   background-image: url("../images/icon/screen-share.png");
 }
 /**/
-.video-control.video {
+.ots-video-control.video {
     background-image: url("../images/icon/video-icon.png");
 }
 
-.video-control.video.disabled,
-.video-control.video:hover {
+.ots-video-control.video.disabled,
+.ots-video-control.video:hover {
     background-image: url("../images/icon/no-video-icon.png");
 }
 
-.video-control.audio {
+.ots-video-control.audio {
     background-image: url("../images/icon/audio.png");
 }
 
-.video-control.audio.disabled,
-.video-control.audio:hover {
+.ots-video-control.audio.disabled,
+.ots-video-control.audio:hover {
     background-image: url("../images/icon/no-audio.png");
 }
 
-.video-control.microphone {
+.ots-video-control.microphone {
     background-image: url("../images/icon/mic.png");
 }
 
-.video-control.microphone.disabled,
-.video-control.microphone:hover {
+.ots-video-control.microphone.disabled,
+.ots-video-control.microphone:hover {
     background-image: url("../images/icon/muted-mic.png");
 }
 
 /* Screensharing styles */
 
-.wms-modal {
+.ots-ss-modal {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -223,7 +223,7 @@ button {
   right: 0;
   background: rgba(0, 0, 0, 0.1);
 }
-.wms-modal .wms-modal-body {
+.ots-ss-modal .ots-modal-body {
   position: relative;
   width: 456px;
   height: 286px;
@@ -239,16 +239,16 @@ button {
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.35);
   color: #282828;
 }
-.wms-modal .wms-modal-body .wms-modal-title span {
+.ots-ss-modal .ots-modal-body .ots-modal-title span {
   font-size: 20px;
   line-height: 20px;
   font-weight: bold;
 }
-.wms-modal .wms-modal-body .wms-modal-title.with-icon {
+.ots-ss-modal .ots-modal-body .ots-modal-title.with-icon {
   position: relative;
   padding-left: 70px;
 }
-.wms-modal .wms-modal-body .wms-modal-title.with-icon i {
+.ots-ss-modal .ots-modal-body .ots-modal-title.with-icon i {
   position: absolute;
   top: 50%;
   left: 0;
@@ -258,11 +258,11 @@ button {
   max-width: 60px;
   max-height: 42px;
 }
-.wms-modal .wms-modal-body p {
+.ots-ss-modal .ots-modal-body p {
   font-size: 14px;
   margin: 20px 0;
 }
-.wms-modal .wms-modal-body .wms-btn-install {
+.ots-ss-modal .ots-modal-body .ots-btn-install {
   display: block;
   width: 316px;
   height: 44px;
@@ -277,7 +277,7 @@ button {
   border-radius: 3px;
 }
 
-.wms-modal .wms-modal-body .wms-cancel-btn-install {
+.ots-ss-modal .ots-modal-body .ots-cancel-btn-install {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -290,19 +290,19 @@ button {
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
-  .wms-modal .wms-modal-body .wms-cancel-btn-install {
+  .ots-ss-modal .ots-modal-body .ots-cancel-btn-install {
     background-image: url("../images/icon/oval-281-x@2x.png");
     background-size: 25px 25px;
   }
 }
 
-.wms-icon-share-large {
+.ots-icon-share-large {
   background-image: url("../images/icon/screenshare-large.png");
   background-repeat: no-repeat;
   background-position: center center;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
-  .wms-icon-share-large {
+  .ots-icon-share-large {
     background-image: url("../images/icon/screenshare-large@2x.png");
     background-size: 60px 41px;
   }
@@ -310,7 +310,7 @@ button {
 
 
 /*Annotation Styles*/
-.annotation-toolbar-container {
+.ots-annotation-toolbar-container {
   display: none;
   position: fixed;
   top: 125px;
@@ -318,36 +318,36 @@ button {
   width: 40px;
   z-index: 1000;
 }
-.annotation-toolbar-container > div input {
+.ots-annotation-toolbar-container > div input {
   display: block;
   top: 0 !important;
   transform: none !important;
 }
-.annotation-toolbar-container > div input#OT_colors {
+.ots-annotation-toolbar-container > div input#OT_colors {
   width: 30px;
   margin-right: 5px !important;
   margin-left: 5px !important;
   padding: 0;
 }
-.annotation-toolbar-container > div .OT_subpanel,
-.annotation-toolbar-container > div .color-picker {
+.ots-annotation-toolbar-container > div .OT_subpanel,
+.ots-annotation-toolbar-container > div .color-picker {
   position: absolute;
   top: 0;
   right: 40px;
   padding-left: 0 !important;
 }
-.annotation-toolbar-container > div .OT_subpanel {
+.ots-annotation-toolbar-container > div .OT_subpanel {
   left: -40px;
   overflow: hidden;
 }
-.annotation-toolbar-container > div .OT_subpanel > div {
+.ots-annotation-toolbar-container > div .OT_subpanel > div {
   top: 0 !important;
   transform: none !important;
 }
-.annotation-toolbar-container > div .color-picker {
+.ots-annotation-toolbar-container > div .color-picker {
   left: -30px;
 }
-.annotation-toolbar-container > div .color-picker .color-choice {
+.ots-annotation-toolbar-container > div .color-picker .color-choice {
   display: block !important;
   height: 20px !important;
   width: 20px !important;
