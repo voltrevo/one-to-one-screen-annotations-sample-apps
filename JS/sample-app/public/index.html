@@ -10,7 +10,6 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/theme.css">
 
     <!-- JS -->
     <script src="https://static.opentok.com/v2/js/opentok.min.js" type="text/javascript" defer></script>
@@ -25,7 +24,8 @@
 </head>
 
 <body>
-    <div id="main" class="main-container">
+    <div class="ots-app-container">
+    <div id="otsWidget" class="ots-widget-container">
         <div id="videoContainer" class="video-container">
             <div id="sharingMask" class="sharing-mask" style="display:none;">
                 <div class="sharing-text">Annotating on External Screen</div>
@@ -43,6 +43,7 @@
                 <div id="enableRemoteVideo" class="ots-video-control video"></div>
             </div>
         </div>
+    </div>
     </div>
 </body>
 
