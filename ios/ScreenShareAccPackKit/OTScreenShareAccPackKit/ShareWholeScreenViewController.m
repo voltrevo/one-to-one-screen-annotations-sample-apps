@@ -58,6 +58,20 @@
         [self performSegueWithIdentifier:@"ColorViewControllerSegue" sender:nil];
     }]];
     
+    [alert addAction:[UIAlertAction actionWithTitle:@"TURN ON/OFF AUDIO" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        if (self.screenSharer.isScreenSharing) {
+            self.screenSharer.publishAudio = !self.screenSharer.publishAudio;
+        }
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"TURN ON/OFF VIDEO" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        if (self.screenSharer.isScreenSharing) {
+            self.screenSharer.publishVideo = !self.screenSharer.publishVideo;
+        }
+    }]];
+    
     [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         
         [alert dismissViewControllerAnimated:YES completion:nil];
