@@ -173,7 +173,7 @@
     };
     _annotation.start(_session, annotationOptions)
       .then(function () {
-        var mainContainer = document.getElementById('main');
+        var mainContainer = document.getElementById('otsWidget');
         mainContainer.classList.add('aspect-ratio');
         _annotation.linkCanvas(subscriber, canvasContainer, {
           absoluteParent: videoContainer
@@ -188,7 +188,7 @@
    */
   var endAnnotationView = function () {
     _annotation.end();
-    var mainContainer = document.getElementById('main');
+    var mainContainer = document.getElementById('otsWidget');
     mainContainer.classList.remove('aspect-ratio');
   };
 
