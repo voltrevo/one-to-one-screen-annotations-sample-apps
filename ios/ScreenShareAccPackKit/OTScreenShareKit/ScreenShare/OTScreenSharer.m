@@ -263,7 +263,7 @@ static NSString * const KLogVariationFailure = @"Failure";
     _subscriber.subscribeToAudio = subscribeToAudio;
 }
 
-- (BOOL)subscribeToAudio {
+- (BOOL)isSubscribeToAudio {
     return _subscriber.subscribeToAudio;
 }
 
@@ -271,20 +271,20 @@ static NSString * const KLogVariationFailure = @"Failure";
     _subscriber.subscribeToVideo = subscribeToVideo;
 }
 
-- (BOOL)subscribeToVideo {
+- (BOOL)isSubscribeToVideo {
     return _subscriber.subscribeToVideo;
 }
 
 - (void)setPublishAudio:(BOOL)publishAudio {
     _publisher.publishAudio = publishAudio;
-    if (publishAudio){
+    if (_publisher.publishAudio){
         [OTKLogger logEventAction:KLogActionEnableAudioScreensharing variation:KLogVariationSuccess completion:nil];
     } else {
         [OTKLogger logEventAction:KLogActionDisableAudioScreensharing variation:KLogVariationSuccess completion:nil];
     }
 }
 
-- (BOOL)publishAudio {
+- (BOOL)isPublishAudio {
     return _publisher.publishAudio;
 }
 
@@ -292,7 +292,7 @@ static NSString * const KLogVariationFailure = @"Failure";
     _publisher.publishVideo = publishVideo;
 }
 
-- (BOOL)publishVideo {
+- (BOOL)isPublishVideo {
     return _publisher.publishVideo;
 }
 
