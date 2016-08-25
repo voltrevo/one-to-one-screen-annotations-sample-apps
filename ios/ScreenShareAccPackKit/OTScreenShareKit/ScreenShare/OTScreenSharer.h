@@ -38,7 +38,7 @@ typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
 /**
  *  @return Returns the shared OTScreenSharer object.
  */
-+ (instancetype)screenSharer;
++ (instancetype)sharedInstance;
 
 /**
  *  Add the configuration detail to your app.

@@ -21,6 +21,28 @@ static NSString * const KLogVariationAttempt = @"Attempt";
 static NSString * const KLogVariationSuccess = @"Success";
 static NSString * const KLogVariationFailure = @"Failure";
 
+@interface SSLoggingWrapper: NSObject
+@property (nonatomic) OTKLogger *logger;
+@end
+
+@implementation SSLoggingWrapper
+
++ (instancetype)sharedInstance {
+    
+    static SSLoggingWrapper *sharedInstance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[SSLoggingWrapper alloc] init];
+        sharedInstance.logger = [[OTKLogger alloc] initWithClientVersion:KLogClientVersion
+                                                                  source:[[NSBundle mainBundle] bundleIdentifier]
+                                                             componentId:kLogComponentIdentifier
+                                                                    guid:[[NSUUID UUID] UUIDString]];
+    });
+    return sharedInstance;
+}
+
+@end
+
 @interface OTScreenSharer()<OTSessionDelegate, OTPublisherDelegate, OTSubscriberKitDelegate>
 
 @property (nonatomic) BOOL isScreenSharing;
@@ -43,43 +65,46 @@ static NSString * const KLogVariationFailure = @"Failure";
                    token:(NSString *)token; {
 
     [OTAcceleratorSession setOpenTokApiKey:apiKey sessionId:sessionId token:token];
-    [OTScreenSharer sharedInstance];
+    
+    SSLoggingWrapper *loggingWrapper = [SSLoggingWrapper sharedInstance];
+    [loggingWrapper.logger logEventAction:KLogActionInitialize variation:KLogVariationAttempt completion:nil];
+    OTScreenSharer *sharedInstance = [OTScreenSharer sharedInstance];
+    if (sharedInstance) {
+        [loggingWrapper.logger logEventAction:KLogActionInitialize variation:KLogVariationSuccess completion:nil];
+    }
+    else {
+        [loggingWrapper.logger logEventAction:KLogActionInitialize variation:KLogVariationFailure completion:nil];
+    }
+    
+    [OTScreenSharer sharedInstance].session = [OTAcceleratorSession getAcceleratorPackSession];
 }
 
 + (instancetype) sharedInstance {
-    [OTKLogger analyticsWithClientVersion:KLogClientVersion
-                                   source:[[NSBundle mainBundle] bundleIdentifier]
-                              componentId:kLogComponentIdentifier
-                                     guid:[[NSUUID UUID] UUIDString]];
-
-    [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationAttempt completion:nil];
-
+    
     static OTScreenSharer *sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[OTScreenSharer alloc] init];
         sharedInstance.session = [OTAcceleratorSession getAcceleratorPackSession];
-        [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationSuccess completion:nil];
     });
 
-    if (!sharedInstance) {
-        [OTKLogger logEventAction:KLogActionInitialize variation:KLogVariationFailure completion:nil];
-    }
     return sharedInstance;
 }
 
 - (void)connectWithView:(UIView *)view {
+    
+    SSLoggingWrapper *loggingWrapper = [SSLoggingWrapper sharedInstance];
     self.screenCapture = [[OTScreenCapture alloc] initWithView:view];
-    [OTKLogger logEventAction:KLogActionStart
+    [loggingWrapper.logger logEventAction:KLogActionStart
                     variation:KLogVariationAttempt
                    completion:nil];
     NSError *registerError = [OTAcceleratorSession registerWithAccePack:self];
     if(registerError){
-        [OTKLogger logEventAction:KLogActionStart
+        [loggingWrapper.logger logEventAction:KLogActionStart
                         variation:KLogVariationFailure
                        completion:nil];
     } else {
-        [OTKLogger logEventAction:KLogActionStart
+        [loggingWrapper.logger logEventAction:KLogActionStart
                         variation:KLogVariationSuccess
                        completion:nil];
     }
@@ -93,9 +118,11 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void)disconnect {
-    [OTKLogger logEventAction:KLogActionEnd
-                    variation:KLogVariationAttempt
-                   completion:nil];
+    
+    SSLoggingWrapper *loggingWrapper = [SSLoggingWrapper sharedInstance];
+    [loggingWrapper.logger logEventAction:KLogActionEnd
+                                variation:KLogVariationAttempt
+                               completion:nil];
     if (self.publisher) {
 
         OTError *error = nil;
@@ -118,14 +145,14 @@ static NSString * const KLogVariationFailure = @"Failure";
 
     NSError *disconnectError = [OTAcceleratorSession deregisterWithAccePack:self];
     if (!disconnectError) {
-        [OTKLogger logEventAction:KLogActionEnd
-                        variation:KLogVariationSuccess
-                       completion:nil];
+        [loggingWrapper.logger logEventAction:KLogActionEnd
+                                    variation:KLogVariationSuccess
+                                   completion:nil];
     }
     else {
-        [OTKLogger logEventAction:KLogActionEnd
-                        variation:KLogVariationFailure
-                       completion:nil];
+        [loggingWrapper.logger logEventAction:KLogActionEnd
+                                    variation:KLogVariationFailure
+                                   completion:nil];
     }
 }
 
@@ -148,7 +175,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 
 - (void) sessionDidConnect:(OTSession *)session {
     //Init otkanalytics. Internal use
-    [OTKLogger setSessionId:session.sessionId connectionId:session.connection.connectionId partnerId:@([self.session.apiKey integerValue])];
+    [[SSLoggingWrapper sharedInstance].logger setSessionId:session.sessionId connectionId:session.connection.connectionId partnerId:@([self.session.apiKey integerValue])];
 
     if (!self.publisher) {
         NSString *deviceName = [UIDevice currentDevice].name;
@@ -278,9 +305,9 @@ static NSString * const KLogVariationFailure = @"Failure";
 - (void)setPublishAudio:(BOOL)publishAudio {
     _publisher.publishAudio = publishAudio;
     if (_publisher.publishAudio){
-        [OTKLogger logEventAction:KLogActionEnableAudioScreensharing variation:KLogVariationSuccess completion:nil];
+        [[SSLoggingWrapper sharedInstance].logger logEventAction:KLogActionEnableAudioScreensharing variation:KLogVariationSuccess completion:nil];
     } else {
-        [OTKLogger logEventAction:KLogActionDisableAudioScreensharing variation:KLogVariationSuccess completion:nil];
+        [[SSLoggingWrapper sharedInstance].logger logEventAction:KLogActionDisableAudioScreensharing variation:KLogVariationSuccess completion:nil];
     }
 }
 
