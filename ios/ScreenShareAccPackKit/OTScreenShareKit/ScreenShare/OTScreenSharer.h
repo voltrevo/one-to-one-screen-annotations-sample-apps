@@ -56,7 +56,7 @@ typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
  *
  *  @param view The UIView to be shared
  */
-- (void)connectWithView:(UIView *)view;
+- (NSError *)connectWithView:(UIView *)view;
 
 /**
  *  Start sharing with a specified UIView, notifying change by the handler block.
@@ -70,7 +70,7 @@ typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
 /**
  *  Stop sharing.
  */
-- (void)disconnect;
+- (NSError *)disconnect;
 
 /**
  *  Change the sharing UIView, it does nothing if sharing is not started.
