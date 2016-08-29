@@ -91,7 +91,7 @@ static NSString * const KLogVariationFailure = @"Failure";
     return sharedInstance;
 }
 
-- (void)connectWithView:(UIView *)view {
+- (NSError *)connectWithView:(UIView *)view {
     
     SSLoggingWrapper *loggingWrapper = [SSLoggingWrapper sharedInstance];
     self.screenCapture = [[OTScreenCapture alloc] initWithView:view];
@@ -108,16 +108,23 @@ static NSString * const KLogVariationFailure = @"Failure";
                         variation:KLogVariationSuccess
                        completion:nil];
     }
+    
+    return registerError;
 }
 
 - (void)connectWithView:(UIView *)view
                 handler:(ScreenShareBlock)handler {
-
+    
+    if (!handler) return;
+    
+    NSError *error = [self connectWithView:view];
     self.handler = handler;
-    [self connectWithView:view];
+    if (error) {
+        self.handler(ScreenShareSignalSessionDidConnect, error);
+    }
 }
 
-- (void)disconnect {
+- (NSError *)disconnect {
     
     SSLoggingWrapper *loggingWrapper = [SSLoggingWrapper sharedInstance];
     [loggingWrapper.logger logEventAction:KLogActionEnd
@@ -128,9 +135,7 @@ static NSString * const KLogVariationFailure = @"Failure";
         OTError *error = nil;
         [self.publisher.view removeFromSuperview];
         [self.session unpublish:self.publisher error:&error];
-        if (error) {
-            NSLog(@"%@", error.localizedDescription);
-        }
+        return error;
     }
 
     if (self.subscriber) {
@@ -138,9 +143,7 @@ static NSString * const KLogVariationFailure = @"Failure";
         OTError *error = nil;
         [self.subscriber.view removeFromSuperview];
         [self.session unsubscribe:self.subscriber error:&error];
-        if (error) {
-            NSLog(@"%@", error.localizedDescription);
-        }
+        return error;
     }
 
     NSError *disconnectError = [OTAcceleratorSession deregisterWithAccePack:self];
@@ -154,6 +157,9 @@ static NSString * const KLogVariationFailure = @"Failure";
                                     variation:KLogVariationFailure
                                    completion:nil];
     }
+    
+    self.isScreenSharing = NO;
+    return disconnectError;
 }
 
 - (void)updateView:(UIView *)view {
@@ -204,8 +210,7 @@ static NSString * const KLogVariationFailure = @"Failure";
 - (void) sessionDidDisconnect:(OTSession *)session {
     self.publisher = nil;
     self.subscriber = nil;
-
-    self.isScreenSharing = NO;
+    
     [self notifiyAllWithSignal:ScreenShareSignalSessionDidDisconnect
                          error:nil];
 }
