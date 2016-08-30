@@ -4,7 +4,7 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
-1.0.3
+1.0.4
 -----
 
 ### Enhancements
@@ -14,6 +14,11 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 ### Fixes
 
 - Fix a bug that `isScreenSharing` does not reset to `NO` when it deregisters.
+
+1.0.3
+-----
+
+### This version is deprecated as it has a severe bug.
 
 1.0.2
 -----
