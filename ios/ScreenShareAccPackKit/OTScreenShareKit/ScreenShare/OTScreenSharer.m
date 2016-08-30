@@ -117,8 +117,8 @@ static NSString * const KLogVariationFailure = @"Failure";
     
     if (!handler) return;
     
-    NSError *error = [self connectWithView:view];
     self.handler = handler;
+    NSError *error = [self connectWithView:view];
     if (error) {
         self.handler(ScreenShareSignalSessionDidConnect, error);
     }
@@ -135,7 +135,10 @@ static NSString * const KLogVariationFailure = @"Failure";
         OTError *error = nil;
         [self.publisher.view removeFromSuperview];
         [self.session unpublish:self.publisher error:&error];
-        return error;
+        if (error) {
+            self.subscriber = nil;
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
+        }
     }
 
     if (self.subscriber) {
@@ -143,7 +146,10 @@ static NSString * const KLogVariationFailure = @"Failure";
         OTError *error = nil;
         [self.subscriber.view removeFromSuperview];
         [self.session unsubscribe:self.subscriber error:&error];
-        return error;
+        if (error) {
+            self.subscriber = nil;
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
+        }
     }
 
     NSError *disconnectError = [OTAcceleratorSession deregisterWithAccePack:self];
@@ -237,7 +243,6 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void)session:(OTSession *)session didFailWithError:(OTError *)error {
-    NSLog(@"session did failed with error: (%@)", error);
     [self notifiyAllWithSignal:ScreenShareSignalSessionDidFail
                          error:error];
 }
@@ -245,7 +250,6 @@ static NSString * const KLogVariationFailure = @"Failure";
 #pragma mark - OTPublisherDelegate
 
 - (void)publisher:(OTPublisherKit *)publisher didFailWithError:(OTError *)error {
-    NSLog(@"publisher did failed with error: (%@)", error);
     [self notifiyAllWithSignal:ScreenShareSignalPublisherDidFail
                          error:error];
 }
@@ -277,7 +281,6 @@ static NSString * const KLogVariationFailure = @"Failure";
 }
 
 - (void)subscriber:(OTSubscriberKit *)subscriber didFailWithError:(OTError *)error {
-    NSLog(@"subscriber did failed with error: (%@)", error);
     [self notifiyAllWithSignal:ScreenShareSignalSubscriberDidFail
                          error:error];
 }
