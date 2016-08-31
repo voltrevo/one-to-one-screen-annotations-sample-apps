@@ -9,7 +9,7 @@
   var _session; // OpenTok session
 
   var _screenSharingControl = [
-    '<div class="video-control circle share-screen" id="startScreenSharing"></div>'
+    '<div class="video-control circle share-screen" id="startScreenSharing" title="Enable/Disable Screen Sharing"></div>'
   ].join('\n');
 
   var _screenSharingView = [
