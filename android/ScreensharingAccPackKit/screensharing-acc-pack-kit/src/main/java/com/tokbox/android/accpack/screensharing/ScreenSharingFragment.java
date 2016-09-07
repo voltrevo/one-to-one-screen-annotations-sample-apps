@@ -30,48 +30,6 @@ import com.opentok.android.OpentokError;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
-import com.tokbox.android.accpack.AccPackSession;
-
-
-import com.tokbox.android.annotations.AnnotationsToolbar;
-import com.tokbox.android.annotations.AnnotationsView;
-import com.tokbox.android.accpack.screensharing.config.OpenTokConfig;
-import com.tokbox.android.annotations.utils.AnnotationsVideoRenderer;
-import com.tokbox.android.logging.OTKAnalytics;
-import com.tokbox.android.logging.OTKAnalyticsData;
-
-import java.util.UUID;
-
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.ImageReader;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-
-import com.opentok.android.Connection;
-import com.opentok.android.OpentokError;
-import com.opentok.android.PublisherKit;
-import com.opentok.android.Session;
-import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
 import com.tokbox.android.accpack.AccPackSession;
 
@@ -83,6 +41,7 @@ import com.tokbox.android.annotations.utils.AnnotationsVideoRenderer;
 import com.tokbox.android.logging.OTKAnalytics;
 import com.tokbox.android.logging.OTKAnalyticsData;
 
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -120,10 +79,6 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
     private AnnotationsToolbar mAnnotationsToolbar;
     private AnnotationsToolbar mRemoteAnnotationsToolbar;
 
-    private RelativeLayout mScreensharingBar;
-    private View mScreensharingLeftView;
-    private View mScreensharingRightView;
-    private View mScreensharingBottomView;
     private ScreenSharingBar screensharingBar;
 
     private boolean isStarted = false;
@@ -389,12 +344,6 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.main_layout, container, false);
-
-        mScreensharingBar = (RelativeLayout) rootView.findViewById(R.id.screnesharing_bar);
-        mScreensharingLeftView = (View) rootView.findViewById(R.id.left_line);
-        mScreensharingRightView = (View) rootView.findViewById(R.id.right_line);
-        mScreensharingBottomView = (View) rootView.findViewById(R.id.bottom_line);
-
         mScreen = container;
 
         return rootView;
@@ -457,20 +406,22 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
         mDensity = metrics.densityDpi;
         Display mDisplay = getActivity().getWindowManager().getDefaultDisplay();
 
-        // get width and height
         Point size = new Point();
-        mDisplay.getSize(size);
+        mDisplay.getRealSize(size);
         mWidth = size.x;
         mHeight = size.y;
 
         // start capture reader
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = mMediaProjection.createVirtualDisplay("ScreenCapture", mWidth, mHeight, mDensity, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
+        int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
+
+        mVirtualDisplay = mMediaProjection.createVirtualDisplay("ScreenCapture", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, null);
 
         size.set(mWidth, mHeight);
 
         //create ScreenCapturer
         ScreenSharingCapturer capturer = new ScreenSharingCapturer(getContext(), mScreen, mImageReader);
+
         mScreenPublisher = new ScreenPublisher(getContext(), "screenPublisher", isAudioEnabled, true, capturer);
         mScreenPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         mScreenPublisher.setPublisherListener(this);
@@ -586,10 +537,11 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
 
     @Override
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
-        enableScreensharingBar(true);
+
         onScreenSharingStarted();
         checkAnnotations();
         isStarted = true;
+
 
         if ( isAnnotationsEnabled ) {
             if (mAnnotationsView == null) {
@@ -605,19 +557,7 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         mScreen.addView(screensharingBar, params);
 
-    }
 
-    private void enableScreensharingBar(boolean visible){
-        if (visible) {
-            mScreensharingBottomView.setVisibility(View.VISIBLE);
-            mScreensharingRightView.setVisibility(View.VISIBLE);
-            mScreensharingLeftView.setVisibility(View.VISIBLE);
-        }
-        else {
-            mScreensharingBottomView.setVisibility(View.GONE);
-            mScreensharingRightView.setVisibility(View.GONE);
-            mScreensharingLeftView.setVisibility(View.GONE);
-        }
     }
 
     private void checkAnnotations() {
@@ -648,7 +588,6 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
         mScreenPublisher = null;
         mScreen.removeView(screensharingBar);
         mScreen.removeView(mAnnotationsView);
-        enableScreensharingBar(false);
         checkAnnotations();
         onScreenSharingStopped();
         onClosed();
@@ -672,4 +611,6 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
             mAnalytics.logEvent(action, variation);
         }
     }
+
+
 }
