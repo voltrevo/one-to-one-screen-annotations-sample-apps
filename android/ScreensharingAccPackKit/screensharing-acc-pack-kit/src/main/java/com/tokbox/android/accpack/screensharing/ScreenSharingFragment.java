@@ -562,19 +562,7 @@ public class ScreenSharingFragment extends Fragment implements AccPackSession.Se
 
     private void checkAnnotations() {
         if (isAnnotationsEnabled) {
-            if (mAnnotationsToolbar.getVisibility() == View.VISIBLE) {
-                mAnnotationsToolbar.setVisibility(View.GONE);
-            } else {
-                mAnnotationsToolbar.setVisibility(View.VISIBLE);
-                mAnnotationsToolbar.restart();
-            }
-
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mAnnotationsToolbar.getLayoutParams();
-            params.leftMargin = dpToPx(5);
-            params.rightMargin = dpToPx(5);
-            params.bottomMargin = dpToPx(5);
-
-            mAnnotationsToolbar.setLayoutParams(params);
+            mAnnotationsToolbar.restart();
         }
     }
 

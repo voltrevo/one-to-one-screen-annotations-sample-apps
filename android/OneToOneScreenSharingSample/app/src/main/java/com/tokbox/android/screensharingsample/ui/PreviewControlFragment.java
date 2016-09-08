@@ -161,7 +161,7 @@ public class PreviewControlFragment extends Fragment {
         return rootView;
     }
 
-    public void updateLocalAudio() {
+    private void updateLocalAudio() {
         if (!mActivity.getComm().getLocalAudio()) {
             mControlCallbacks.onDisableLocalAudio(true);
             mAudioBtn.setImageResource(R.drawable.mic_icon);
@@ -171,7 +171,7 @@ public class PreviewControlFragment extends Fragment {
         }
     }
 
-    public void updateLocalVideo() {
+    private void updateLocalVideo() {
         if (!mActivity.getComm().getLocalVideo()) {
             mControlCallbacks.onDisableLocalVideo(true);
             mVideoBtn.setImageResource(R.drawable.video_icon);
@@ -181,7 +181,7 @@ public class PreviewControlFragment extends Fragment {
         }
     }
 
-    public void updateCall() {
+    private void updateCall() {
         mCallBtn.setImageResource(!mActivity.getComm().isStarted()
                 ? R.drawable.hang_up
                 : R.drawable.start_call);
@@ -191,7 +191,7 @@ public class PreviewControlFragment extends Fragment {
         mControlCallbacks.onCall();
     }
 
-    public void updateScreensharing() {
+    private void updateScreensharing() {
         mVideoBtn.setOnClickListener(!mActivity.isScreensharing()
                 ? null
                 : mBtnClickListener);
@@ -207,10 +207,8 @@ public class PreviewControlFragment extends Fragment {
         mControlCallbacks.onScreenSharing();
     }
 
-    public void updateAnnotations() {
-        mAnnotationsBtn.setBackgroundResource(!mActivity.isAnnotations()
-                ? R.drawable.bckg_icon_selected
-                : R.drawable.bckg_icon);
+    private void updateAnnotations() {
+        restartAnnotations();
         mControlCallbacks.onAnnotations();
     }
 
@@ -234,6 +232,25 @@ public class PreviewControlFragment extends Fragment {
         setEnabled(false);
         mCallBtn.setBackgroundResource(R.drawable.initiate_call_button);
         mCallBtn.setImageResource(R.drawable.start_call);
+        mScreenSharingBtn.setBackgroundResource(R.drawable.bckg_icon);
+        mAnnotationsBtn.setBackgroundResource(R.drawable.bckg_icon);
+    }
+
+    public void restartAnnotations(){
+        mAnnotationsBtn.setBackgroundResource(!mActivity.isAnnotations()
+                ? R.drawable.bckg_icon_selected
+                : R.drawable.bckg_icon);
+    }
+    public void enableAnnotations(boolean enable){
+        mAnnotationsBtn.setOnClickListener(enable
+                ? mBtnClickListener
+                : null);
+
+    }
+    public void restartScreensharing(){
+        mScreenSharingBtn.setBackgroundResource(!mActivity.isScreensharing()
+                ? R.drawable.bckg_icon_selected
+                : R.drawable.bckg_icon);
 
     }
 }

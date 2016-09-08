@@ -29,8 +29,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.opentok.android.Publisher;
-import com.opentok.android.Subscriber;
 import com.tokbox.android.accpack.OneToOneCommunication;
 import com.tokbox.android.annotations.AnnotationsToolbar;
 import com.tokbox.android.annotations.AnnotationsView;
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
     private RelativeLayout.LayoutParams layoutParamsPreview;
     private RelativeLayout mCameraFragmentContainer;
     private RelativeLayout mActionBarContainer;
-    private FrameLayout mScreenSharingContainer;
 
     private TextView mAlert;
     private ImageView mAudioOnlyImage;
@@ -87,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
     private TableLayout menu4;
 
     private AnnotationsToolbar mAnnotationsToolbar;
-    private AnnotationsToolbar mRemmoteAnnotationsToolbar;
+
+    private TextView mCallToolbar;
 
     private boolean screenshot;
     private boolean remoteAnnotations = false;
@@ -112,17 +110,10 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
         mLocalAudioOnlyView = (RelativeLayout) findViewById(R.id.localAudioOnlyView);
         mCameraFragmentContainer = (RelativeLayout) findViewById(R.id.camera_preview_fragment_container);
         mActionBarContainer = (RelativeLayout) findViewById(R.id.actionbar_preview_fragment_container);
-        mScreenSharingContainer = (FrameLayout) findViewById(R.id.screensharing_fragment_container);
-
+      
         mAnnotationsToolbar = (AnnotationsToolbar) findViewById(R.id.annotations_bar);
 
-        mRemmoteAnnotationsToolbar = new AnnotationsToolbar(this);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        mRemmoteAnnotationsToolbar.setLayoutParams(params);
+        mCallToolbar = (TextView)findViewById(R.id.call_toolbar);
 
         menu1 = (TableLayout) findViewById(R.id.menu1);
         menu2 = (RelativeLayout) findViewById(R.id.menu2);
@@ -338,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
             Log.i(LOG_TAG, "Screensharing stop");
             mScreenSharingFragment.stop();
             showAVCall(true);
+            mPreviewFragment.restartScreensharing(); //restart screensharing UI
             mComm.start(); //restart the av call
             isScreensharing = false;
         }
@@ -357,10 +349,14 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
         if (!isAnnotations) {
             mAnnotationsToolbar.setVisibility(View.VISIBLE);
             isAnnotations = true;
+            mCallToolbar.setVisibility(View.VISIBLE);
+            mActionBarContainer.setVisibility(View.GONE);
         }
         else {
             mAnnotationsToolbar.setVisibility(View.GONE);
             isAnnotations = false;
+            mCallToolbar.setVisibility(View.GONE);
+            mActionBarContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -386,6 +382,14 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
         if (mComm != null) {
             mComm.swapCamera();
         }
+    }
+
+    public void onCallToolbar(View view){
+        mCallToolbar.setVisibility(View.GONE);
+        mAnnotationsToolbar.setVisibility(View.GONE);
+        mActionBarContainer.setVisibility(View.VISIBLE);
+        mPreviewFragment.restartAnnotations();
+        isAnnotations = false;
     }
 
     //OneToOneCommunicator listener events
@@ -485,12 +489,9 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                             .getDisplayMetrics().heightPixels);
                     mRemoteViewContainer.addView(mComm.getRemoteScreenView(), layoutParams);
 
-                    //if ( !remoteAnnotations ) {
-                    //enable annotations
-                    mScreenSharingFragment.enableRemoteAnnotations(true,  mRemmoteAnnotationsToolbar,mRemoteViewContainer, mComm.getRemote());
-                    mRemoteViewContainer.addView(mRemmoteAnnotationsToolbar);
+                    mScreenSharingFragment.enableRemoteAnnotations(true,  mAnnotationsToolbar,mRemoteViewContainer, mComm.getRemote());
                     remoteAnnotations = true;
-                    // }
+                    mPreviewFragment.enableAnnotations(true);
                 }
             } else {
                 if (mComm.isStarted()) {
@@ -500,8 +501,8 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                     //clear views
                     onAudioOnly(false);
                     mRemoteViewContainer.removeAllViews();
-                    // mRemoteViewContainer.removeView(remoteView);
                     mRemoteViewContainer.setClickable(false);
+                    mPreviewFragment.enableAnnotations(false);
                 } else {
                     if (mComm.getRemoteVideoView() != null) {
                         //show remote view
@@ -567,7 +568,6 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
 
     private void showAVCall(boolean show) {
         if (show) {
-            //mActionBarContainer.setVisibility(View.VISIBLE);
             mPreviewViewContainer.setVisibility(View.VISIBLE);
             mRemoteViewContainer.setVisibility(View.VISIBLE);
             mCameraFragmentContainer.setVisibility(View.VISIBLE);
@@ -575,8 +575,9 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
             menu2.setVisibility(View.GONE);
             menu3.setVisibility(View.GONE);
             menu4.setVisibility(View.GONE);
+            mAnnotationsToolbar.setVisibility(View.GONE);
+            mCallToolbar.setVisibility(View.GONE);
         } else {
-            //mActionBarContainer.setVisibility(View.GONE);
             mPreviewViewContainer.setVisibility(View.GONE);
             mRemoteViewContainer.setVisibility(View.GONE);
             mCameraFragmentContainer.setVisibility(View.GONE);
