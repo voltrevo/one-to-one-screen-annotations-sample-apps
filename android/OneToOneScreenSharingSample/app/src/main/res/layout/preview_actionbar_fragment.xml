@@ -50,7 +50,7 @@
             android:layout_marginLeft="14.1dp"
             android:layout_toRightOf="@+id/call"
             android:background="@drawable/bckg_icon"
-            android:src="@drawable/screenshare" />
+            android:src="@drawable/annotate" />
 
         <ImageButton
             android:id="@+id/screenSharing"
