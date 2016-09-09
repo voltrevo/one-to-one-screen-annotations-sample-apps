@@ -12,11 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/**
+ * Defines a view to represent the ScreenSharingBar.
+ *
+ */
 public class ScreenSharingBar extends RelativeLayout{
 
     private TextView mTextView;
     private ImageButton mCloseBtn;
-    private ImageButton mScreenSharingInfo;
     private ScreenSharingBarListener mListener;
 
     /*
@@ -52,7 +55,6 @@ public class ScreenSharingBar extends RelativeLayout{
 
         mTextView = new TextView(context);
         mTextView.setText(R.string.screensharing_text);
-
         params = new RelativeLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
