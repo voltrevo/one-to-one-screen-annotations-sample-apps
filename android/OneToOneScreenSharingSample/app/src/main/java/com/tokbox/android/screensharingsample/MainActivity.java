@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private final String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private final String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SYSTEM_ALERT_WINDOW};
     private final int permsRequestCode = 200;
 
     //OpenTok calls
@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                 boolean audio = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                 boolean readExternalStorage = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                 boolean writeExternalStorage = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                boolean systemAlertWindow = grantResults[4] == PackageManager.PERMISSION_GRANTED;
                 break;
         }
     }
@@ -385,10 +386,7 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
     }
 
     public void onCallToolbar(View view){
-        mCallToolbar.setVisibility(View.GONE);
-        mAnnotationsToolbar.setVisibility(View.GONE);
-        mActionBarContainer.setVisibility(View.VISIBLE);
-        mPreviewFragment.restartAnnotations();
+        restartAnnotations();
         isAnnotations = false;
     }
 
@@ -494,6 +492,8 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                     mPreviewFragment.enableAnnotations(true);
                 }
             } else {
+                restartAnnotations();
+
                 if (mComm.isStarted()) {
                     onPreviewReady(mComm.getPreviewView()); //main preview view
                 }
@@ -503,7 +503,8 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                     mRemoteViewContainer.removeAllViews();
                     mRemoteViewContainer.setClickable(false);
                     mPreviewFragment.enableAnnotations(false);
-                } else {
+
+                 } else {
                     if (mComm.getRemoteVideoView() != null) {
                         //show remote view
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -517,6 +518,7 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
                 }
             }
         }
+
     }
 
     //Private methods
@@ -672,5 +674,12 @@ public class MainActivity extends AppCompatActivity implements OneToOneCommunica
         screenshot = true;
     }
 
+    private void restartAnnotations(){
+        mCallToolbar.setVisibility(View.GONE);
+        mAnnotationsToolbar.setVisibility(View.GONE);
+        mActionBarContainer.setVisibility(View.VISIBLE);
+        mPreviewFragment.restartAnnotations();
+
+    }
 }
 
