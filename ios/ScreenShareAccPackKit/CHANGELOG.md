@@ -4,6 +4,18 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
+1.0.5
+-----
+
+### Breaking changes
+
+- renaming all OpenTok related stuff to have `OT` suffix.
+
+### Enhancements
+
+- Expose `subscriberVideoContentMode` property to have control of the video content mode.
+- Expose `subscriberVideoDimension` property to read the actual video dimension.
+
 1.0.4
 -----
 

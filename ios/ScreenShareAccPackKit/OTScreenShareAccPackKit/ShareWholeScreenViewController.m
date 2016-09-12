@@ -29,11 +29,11 @@
     self.navigationItem.rightBarButtonItem = previewBarButtonItem;
 
     // UNCOMMENT this will start the screen share and you can view it from another subscriber
-//    self.screenSharer = [OTScreenSharer screenSharer];
-//    [self.screenSharer connectWithView:[UIApplication sharedApplication].keyWindow.rootViewController.view handler:^(ScreenShareSignal signal, NSError *error) {
-//        
-//        NSLog(@"%@", error);
-//    }];
+    self.screenSharer = [OTScreenSharer sharedInstance];
+    [self.screenSharer connectWithView:[UIApplication sharedApplication].keyWindow.rootViewController.view handler:^(OTScreenShareSignal signal, NSError *error) {
+        
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)navigateToOtherViews {
@@ -69,6 +69,19 @@
         
         if (self.screenSharer.isScreenSharing) {
             self.screenSharer.publishVideo = !self.screenSharer.publishVideo;
+        }
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"MAKE FIT/FILL SCREEN" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        if (self.screenSharer.isScreenSharing) {
+            
+            if (self.screenSharer.subscriberVideoContentMode == OTScreenShareVideoViewFit) {
+                self.screenSharer.subscriberVideoContentMode = OTScreenShareVideoViewFill;
+            }
+            else {
+                self.screenSharer.subscriberVideoContentMode = OTScreenShareVideoViewFit;
+            }
         }
     }]];
     
