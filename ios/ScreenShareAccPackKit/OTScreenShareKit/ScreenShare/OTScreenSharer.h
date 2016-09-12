@@ -6,25 +6,30 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, ScreenShareSignal) {
-    ScreenShareSignalSessionDidConnect = 0,
-    ScreenShareSignalSessionDidDisconnect,
-    ScreenShareSignalSessionDidFail,
-    ScreenShareSignalSessionStreamCreated,
-    ScreenShareSignalSessionStreamDestroyed,
-    ScreenShareSignalPublisherDidFail,
-    ScreenShareSignalSubscriberConnect,
-    ScreenShareSignalSubscriberDidFail,
-    ScreenShareSignalSubscriberVideoDisabled,
-    ScreenShareSignalSubscriberVideoEnabled,
-    ScreenShareSignalSubscriberVideoDisableWarning,
-    ScreenShareSignalSubscriberVideoDisableWarningLifted,
+typedef NS_ENUM(NSUInteger, OTScreenShareSignal) {
+    OTScreenShareSignalSessionDidConnect = 0,
+    OTScreenShareSignalSessionDidDisconnect,
+    OTScreenShareSignalSessionDidFail,
+    OTScreenShareSignalSessionStreamCreated,
+    OTScreenShareSignalSessionStreamDestroyed,
+    OTScreenShareSignalPublisherDidFail,
+    OTScreenShareSignalSubscriberConnect,
+    OTScreenShareSignalSubscriberDidFail,
+    OTScreenShareSignalSubscriberVideoDisabled,
+    OTScreenShareSignalSubscriberVideoEnabled,
+    OTScreenShareSignalSubscriberVideoDisableWarning,
+    OTScreenShareSignalSubscriberVideoDisableWarningLifted,
 };
 
-typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
+typedef NS_ENUM(NSInteger, OTScreenShareVideoViewContentMode) {
+    OTScreenShareVideoViewFit,
+    OTScreenShareVideoViewFill
+};
 
-@protocol ScreenShareDelegate <NSObject>
-- (void)screenShareWithSignal:(ScreenShareSignal)signal
+typedef void (^OTScreenShareBlock)(OTScreenShareSignal signal, NSError *error);
+
+@protocol OTScreenShareDelegate <NSObject>
+- (void)screenShareWithSignal:(OTScreenShareSignal)signal
                         error:(NSError *)error;
 @end
 
@@ -65,7 +70,7 @@ typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
  *  @param handler The completion handler to call with the change.
  */
 - (void)connectWithView:(UIView *)view
-                handler:(ScreenShareBlock)handler;
+                handler:(OTScreenShareBlock)handler;
 
 /**
  *  Stop sharing.
@@ -82,9 +87,11 @@ typedef void (^ScreenShareBlock)(ScreenShareSignal signal, NSError *error);
  *
  *  The delegate must adopt the ScreenShareDelegate protocol. The delegate is not retained.
  */
-@property (weak, nonatomic) id<ScreenShareDelegate> delegate;
+@property (weak, nonatomic) id<OTScreenShareDelegate> delegate;
 
 // SUBSCRIBER
+@property (nonatomic) OTScreenShareVideoViewContentMode subscriberVideoContentMode;
+@property (readonly, nonatomic) CGSize subscriberVideoDimension;
 @property (readonly, nonatomic) UIView *subscriberView;
 @property (nonatomic, getter=isSubscribeToAudio) BOOL subscribeToAudio;
 @property (nonatomic, getter=isSubscribeToVideo) BOOL subscribeToVideo;
