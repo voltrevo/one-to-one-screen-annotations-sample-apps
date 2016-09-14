@@ -1,89 +1,80 @@
 ![logo](../tokbox-logo.png)
 
-# OpenTok Screensharing with Annotations Accelerator Pack for iOS<br/>Version 2.0.0
-
-This document describes how to use the OpenTok Screensharing with Annotations Accelerator Pack for iOS. Through the exploration of the OpenTok Screensharing with Annotations Sample App, you will learn best practices for screensharing on an iOS mobile device.
-
-You can configure and run this sample app within just a few minutes!
-
-
-This guide has the following sections:
-
-- [Prerequisites](#prerequisites): A checklist of everything you need to get started.
-- [Quick start](#quick-start): A step-by-step tutorial to help you quickly import and run the sample app.
-- [Exploring the code](#exploring-the-code): This describes the sample app code design, which uses recommended best practices to create a working implementation that uses the Screensharing with Annotations Accelerator. 
-
-## Prerequisites
-
-To be prepared to develop your screensharing with annotations app:
-
-1. Install Xcode version 5 or later.
-2. Review the [OpenTok iOS SDK Requirements](https://tokbox.com/developer/sdks/ios/).
-3. Your app will need a **Session ID**, **Token**, and **API Key**, which you can get at the [OpenTok Developer Dashboard](https://dashboard.tokbox.com/).
-
-_You do not need the OpenTok iOS SDK to use this sample._
-
-_**NOTE**: The OpenTok Developer Dashboard allows you to quickly run this sample program. For production deployment, you must generate the **Session ID** and **Token** values using one of the [OpenTok Server SDKs](https://tokbox.com/developer/sdks/server/)._
+# OpenTok Screensharing with Annotations Sample for iOS<br/>Version 2.0.0
 
 ## Quick start
 
-To get up and running quickly with your app, go through the following steps in the tutorial provided below:
+This section shows you how to prepare, build, and run the sample application.
 
-### Using CocoaPods
+### Install the project files
 
-1. In a terminal prompt, navigate into your project directory and type `pod install`.
-2. Reopen your project using the new *.xcworkspace file.
+Use CocoaPods to install the project files and dependencies.
 
-For more information about CocoaPods, including installation instructions, visit [CocoaPods Getting Started](https://guides.cocoapods.org/using/getting-started.html#getting-started).
+1. Install CocoaPods as described in [CocoaPods Getting Started](https://guides.cocoapods.org/using/getting-started.html#getting-started).
+1. Add the following line to your pod file: ` pod ‘OTScreenShareKit’  `
+1. In Terminal, `cd` to your project directory and type `pod install`.
+1. Reopen your project using the new `*.xcworkspace` file.
 
-### Configuring the app
+### Configure and build the app
 
-Now you are ready to add the configuration detail to your app. These will include the **Session ID**, **Token**, and **API Key** you retrieved earlier (see [Prerequisites](#prerequisites)).
+Configure the sample app code. Then, build and run the app.
 
-In **AppDelegate.h**, replace the following empty strings with the required detail:
+1. Get values for **API Key**, **Session ID**, and **Token**. See the [Screensharing Annotation Sample home page](../README.md) for important information.
 
+1. In Xcode, open **AppDelegate.h** and replace the following empty strings with the corresponding **API Key**, **Session ID**, and **Token** values:
 
-```objc
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	```objc
+	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-	  // Override point for customization after application launch.    
-    [OTScreenSharer setOpenTokApiKey:@""
-                           sessionId:@""
-                               token:@""];
-  	return YES;
-}
-```
+		  // Override point for customization after application launch.    
+	    [OTScreenSharer setOpenTokApiKey:@""
+	                           sessionId:@""
+	                               token:@""];
+	  	return YES;
+	}
+	```
 
-_At this point you can try running the app! You can either use a simulator or an actual mobile device._
+1. Use Xcode to build and run the app on an iOS simulator or device.
 
 
 ## Exploring the code
 
-This section describes how the sample app code design uses recommended best practices to deploy the screensharing with annotations features. The sample app design extends the [OpenTok One-to-One Communication Sample App](https://github.com/opentok/one-to-one-sample-apps/tree/master/one-to-one-sample-app/) and [OpenTok Common Accelerator Session Pack](https://github.com/opentok/acc-pack-common/) by adding logic using the classes in the `OTScreenShareKit` framework.
+This section describes best practices the sample app code uses to deploy screen sharing with annotations.
 
-For detail about the APIs used to develop this sample, see the [OpenTok iOS SDK Reference](https://tokbox.com/developer/sdks/ios/reference/).
+The sample app design extends the [OpenTok One-to-One Communication Sample App](https://github.com/opentok/one-to-one-sample-apps/tree/master/one-to-one-sample-app/) and [OpenTok Common Accelerator Session Pack](https://github.com/opentok/acc-pack-common/) by adding logic using the classes in the `OTScreenShareKit` framework.
 
-  - [App design](#app-design)
-  - [Screensharing and annotation features](#screensharing-and-annotation-features)
+For details about developing with the SDK and the APIs this sample uses, see [Requirements](#requirements), the [OpenTok iOS SDK Requirements](https://tokbox.com/developer/sdks/ios/) and the [OpenTok iOS SDK Reference](https://tokbox.com/developer/sdks/ios/reference/).
 
-_**NOTE:** The sample app contains logic used for logging. This is used to submit anonymous usage data for internal TokBox purposes only. We request that you do not modify or remove any logging code in your use of this sample application._
+_**NOTE:** This sample app collects anonymous usage data for internal TokBox purposes only. Please do not modify or remove any logging code from this sample application._
 
 ### App design
 
-The following classes, interfaces, and protocols represent the software design for this sample app, focusing primarily on the screensharing with annotations features. For details about the one-to-one communication aspects of the design, see the [OpenTok One-to-One Communication Sample App](https://github.com/opentok/one-to-one-sample-apps).
+This section focuses on screen sharing with annotations features. For information about one-to-one communication features, see the [OpenTok One-to-One Communication Sample App](https://github.com/opentok/one-to-one-sample-apps).
 
 | Class        | Description  |
 | ------------- | ------------- |
-| `MainViewController`   | In conjunction with **Main.storyboard**, this class uses the OpenTok API to initiate the client connection to the OpenTok session, and implements the sample UI and screensharing with annotations callbacks.   |
+| `MainViewController`   | In conjunction with **Main.storyboard**, this class uses the OpenTok API to initiate the client connection to the OpenTok session. It also implements the sample UI and screen sharing with annotations callbacks.   |
+
+
+From the [ScreenShareAccPackKit](https://github.com/opentok/screen-sharing-acc-pack).
+
+| Class        | Description  |
+| ------------- | ------------- |
 | `OTScreenSharer`   | This component enables the publisher to share either the entire screen or a specified portion of the screen. |
-| `OTAnnotationScrollView` | Provides the initializers and methods for the client annotating views. See the [OpenTok Annotations Accelerator Pack](https://github.com/opentok/annotation-acc-pack) for more information. |
-| `OTAnnotationToolbarView`   | A convenient annotation toolbar that is optionally available for your development. As an alternative, you can create your own toolbar using `OTAnnotationScrollView`. See the [OpenTok Annotations Accelerator Pack](https://github.com/opentok/annotation-acc-pack) for more information. |
-| `OTFullScreenAnnotationViewController`   | Combines both the scroll and annotation toolbar views. See the [OpenTok Annotations Accelerator Pack](https://github.com/opentok/annotation-acc-pack) for more information. |
 
 
-### Screensharing and annotation features
+From the [AnnotationAccPackKit](https://github.com/opentok/annotation-acc-pack).
 
-The `OTScreenSharer` and `OTAnnotationScrollView` classes are the backbone of the screensharing and annotation features for the app.
+| Class        | Description  |
+| ------------- | ------------- |
+| `OTAnnotationScrollView` | Provides the initializers and methods for the client annotating views. See the [OpenTok Annotations Sample](https://github.com/opentok/annotation-acc-pack) for more information. |
+| `OTAnnotationToolbarView`   | A convenient annotation toolbar that is optionally available for your development. As an alternative, you can create a toolbar using `OTAnnotationScrollView`. See the [OpenTok Annotations Sample](https://github.com/opentok/annotation-acc-pack) for more information. |
+| `OTFullScreenAnnotationViewController`   | Combines both the scroll and annotation toolbar views. See the [OpenTok Annotations Sample](https://github.com/opentok/annotation-acc-pack) for more information. |
+
+
+### Screen sharing and annotation features
+
+The `OTScreenSharer` and `OTAnnotationScrollView` classes are the backbone of the screen sharing and annotation features for the app.
 
 ```objc
 @interface OTScreenSharer : NSObject
@@ -121,7 +112,7 @@ property (nonatomic, getter = isAnnotatable) BOOL annotatable;
 @property (readonly, nonatomic) OTAnnotationView *annotationView;
 
 - (instancetype)initWithFrame:(CGRect)frame;
-- (void)addContentView:(UIView *)view;  // this will enable scrolling if image is larger than actual device screen
+- (void)addContentView:(UIView *)view;  // Enables scrolling if image is larger than device screen
 
 #pragma mark - Tool bar
 @property (nullable, readonly, nonatomic) OTAnnotationToolbarView *toolbarView;
@@ -137,7 +128,7 @@ property (nonatomic, getter = isAnnotatable) BOOL annotatable;
 
 #### Initialization methods
 
-The following `OTScreenSharer` and `OTAnnotationScrollView` methods are used to initialize the screensharing with annotations features so the publisher and subscriber can both annotate the shared screen.
+The following `OTScreenSharer` and `OTAnnotationScrollView` methods initialize the screen sharing with annotations features so the publisher and subscriber can both annotate the shared screen.
 
 | Feature        | Methods  |
 | ------------- | ------------- |
@@ -148,11 +139,11 @@ The following `OTScreenSharer` and `OTAnnotationScrollView` methods are used to 
 ```objc
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     UIImage *image = [UIImage imageNamed:@"mvc"];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    
+
     self.screenShareView = [[OTAnnotationScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds))];
     [self.screenShareView addContentView:imageView];
     [self.view addSubview:self.screenShareView];
@@ -160,7 +151,7 @@ The following `OTScreenSharer` and `OTAnnotationScrollView` methods are used to 
 
 - (void)shareTheWholeScreen {
 	[self.screenSharer connectWithView:[UIApplication sharedApplication].keyWindow.rootViewController.view handler:^(ScreenShareSignal signal, NSError *error) {
-                
+
         if (!error) {
             // begin sharing screen
         }
@@ -170,3 +161,12 @@ The following `OTScreenSharer` and `OTAnnotationScrollView` methods are used to 
     }];
 }
 ```
+
+## Requirements
+
+To develop a screen sharing with annotations app:
+
+1. Install Xcode version 5 or later.
+1. Review the [OpenTok iOS SDK Requirements](https://tokbox.com/developer/sdks/ios/).
+
+_You do not need the OpenTok iOS SDK to use this sample._
