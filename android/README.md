@@ -11,26 +11,24 @@ This section shows you how to prepare, build, and run the sample application.
 1. Clone [the OpenTok Screensharing with Annotations Sample App repository](https://github.com/opentok/screensharing-annotation-acc-pack/tree/master/android) from GitHub.
 2. Start Android Studio.
 3. In the **Quick Start** panel, click **Open an existing Android Studio Project**.
-4. Navigate to the **android** folder, select the **SampleApp** folder, and click **Choose**.
+4. Navigate to the **android** folder, select the **OneToOneScreenSharingSample** folder, and click **Choose**.
 
 
-### Adding the Sample library
+### Adding the Screensharing library
 
-Use one of the following options to install the OpenTok Screensharing with Annotations Sample library:
+Use one of the following options to install the OpenTok Screensharing library, which includes the Annotations dependency:
 
   - [Using the repository](#using-the-repository)
   - [Using Maven](#using-maven)
   - [Downloading and Installing the AAR File](#downloading-and-installing-the-aar-file)
 
-**NOTE**:
-  - The OpenTok Screensharing Sample App includes the [TokBox Common Accelerator Session Pack](https://github.com/opentok/acc-pack-common).
-  - The OpenTok Screensharing with Annotations Sample includes the [OpenTok Annotations Kit] (https://github.com/opentok/annotation-acc-pack).
+**NOTE**: The OpenTok Screensharing Sample App uses the [TokBox Common Accelerator Session Pack](https://github.com/opentok/acc-pack-common), the [OpenTok Screensharing Kit](https://github.com/opentok/screen-sharing-acc-pack), and the [OpenTok Annotations Kit] (https://github.com/opentok/annotation-acc-pack).
 
 #### Using the repository
 
-1. Clone the [OpenTok Screensharing with Annotations Sample repo](https://github.com/opentok/screensharing-annotation-acc-pack).
+1. Clone the [OpenTok Screensharing Accelerator Pack repo](https://github.com/opentok/screen-sharing-acc-pack).
 2. From the OpenTok Screensharing with Annotations Sample app project, right-click the app name and select **New > Module > Import Gradle Project**.
-3. Navigate to the directory in which you cloned **OpenTok Screensharing with Annotations Sample**, select **screensharing-acc-pack-kit**, and click **Finish**.
+3. Navigate to the directory in which you cloned **OpenTok Screensharing Accelerator Pack**, select **screensharing-acc-pack-kit**, and click **Finish**.
 4. Open the **build.gradle** file for the app and ensure the following lines have been added to the `dependencies` section:
 ```
 compile project(':screensharing-acc-pack-kit')
@@ -51,11 +49,11 @@ compile project(':screensharing-acc-pack-kit')
 
 #### Downloading and Installing the AAR File
 
-1.  Download the [Screensharing with Annotations Sample zip file](https://s3.amazonaws.com/artifact.tokbox.com/solution/rel/screensharing-annotations-acc-pack/android/opentok-screensharing-annotations-2.0.0.zip).
+1.  Download the [Screensharing with Annotations Library AAR](https://s3.amazonaws.com/artifact.tokbox.com/solution/rel/screensharing-annotations-acc-pack/android/opentok-screensharing-annotations-2.0.0.zip).
 1. Extract the **opentok-screensharing-annotations-2.0.0.aar** file.
 1. Right-click the app name, select **Open Module Settings**, and click **+**.
 1. Select **Import .JAR/.AAR Package** and click  **Next**.
-1. Browse to the **Screensharing with Annotations Sample library AAR** and click **Finish**.
+1. Browse to the **Screensharing with Annotations library AAR** and click **Finish**.
 
 
 ### Configure and build the app
@@ -79,28 +77,25 @@ Configure the sample app code. Then, build and run the app.
 
 1. Use Android Studio to build and run the app on an Android emulator or device.
 
+1. By default, your app does not subscribe to its own stream. This feature is controlled by the following line of code open **OpenTokConfig.java**.
 
-### Optional: Manage Annotations from Other Clients
+    ```java
+    public static final boolean SUBSCRIBE_TO_SELF = false;
+    ```
 
-By default, your app receives annotations from other clients that have the same session ID. This feature is controlled by the following line of code open **OpenTokConfig.java**.
+    To enable or disable the `SUBSCRIBE_TO_SELF` feature, you can invoke the `OneToOneCommunication.setSubscribeToSelf()` method:
 
-```java
-public static final boolean SUBSCRIBE_TO_SELF = false;
-```
+    ```java
+    OneToOneCommunication comm = new OneToOneCommunication(
+      MainActivity.this,
+      OpenTokConfig.SESSION_ID,
+      OpenTokConfig.TOKEN,
+      OpenTokConfig.API_KEY
+    );
 
-To enable or disable the `SUBSCRIBE_TO_SELF` feature, you can invoke the `OneToOneCommunication.setSubscribeToSelf()` method:
+    comm.setSubscribeToSelf(OpenTokConfig.SUBSCRIBE_TO_SELF);
 
-```java
-OneToOneCommunication comm = new OneToOneCommunication(
-  MainActivity.this,
-  OpenTokConfig.SESSION_ID,
-  OpenTokConfig.TOKEN,
-  OpenTokConfig.API_KEY
-);
-
-comm.setSubscribeToSelf(OpenTokConfig.SUBSCRIBE_TO_SELF);
-
-```
+    ```
 
 ## Exploring the code
 
@@ -169,7 +164,6 @@ public interface ScreenSharingListener {
     void onScreenSharingError(String error);
     void onAnnotationsViewReady(AnnotationsView view);       // publisher view
     void onAnnotationsRemoteViewReady(AnnotationsView view); // subscriber view
-    void onClosed();
 
 }
 ```
@@ -177,7 +171,7 @@ public interface ScreenSharingListener {
 
 #### Initialization methods
 
-The following `ScreenSharingFragment` methods are used to initialize the app and provide basic information determining the behavior of the screen sharing with annotations functionality.
+The following `ScreenSharingFragment` methods are the main methods of the ScreensharingKit and provide basic information determining the behavior of the screen sharing with annotations functionality. They are used for such purposes as starting and stopping screensharing, as well as enabling and disabling publisher and subscriber annotations.
 
 | Feature        | Methods  |
 | ------------- | ------------- |
@@ -192,7 +186,7 @@ The following `ScreenSharingFragment` methods are used to initialize the app and
 
 To set up your annotation toolbar, instantiate a `ScreenSharingFragment` object and call the `setAnnotationsEnabled(boolean annotationsEnabled, AnnotationsToolbar toolbar)` method, setting the `annotationsEnabled` parameter to `true`.
 
-For example, the following private method instantiates a `ScreenSharingFragment` object and enables the annotation toolbar:
+For example, the following private method instantiates a `ScreenSharingFragment` object and enables the annotation toolbar in the Publisher:
 
 ```java
     private void initScreenSharingFragment(){
@@ -214,6 +208,11 @@ For example, the following private method instantiates a `ScreenSharingFragment`
     }
 ```
 
+To enable the annotation toolbar in the Subscriber:
+
+```java
+     mScreenSharingFragment.enableRemoteAnnotations(true, mAnnotationsToolbar, mRemoteViewContainer, mComm.getRemote());
+```
 
 #### Capturing and Saving a Screenshot
 
@@ -245,19 +244,18 @@ public class MainActivity extends AppCompatActivity implements
 ```
 
 
-
 ### User interface
 
 As described in [Class design](#class-design), the `ScreenSharingFragment` class sets up and manages the UI views, events, and rendering for the screen sharing with annotations controls.
 
-This class works with the following `MainActivity` methods, which manage the views as both clients participate in the session.
+This class works with the following `MainActivity` methods, which manage the views as both clients participate in the session. These are callbacks that allow you to modify the app UI when there are changes in the Screensharing with Annotations library.
 
 | Feature        | Methods  |
 | ------------- | ------------- |
 | Manage the UI containers. | `onCreate()`  |
 | Reload the UI views whenever the device [configuration](http://developer.android.com/reference/android/content/res/Configuration.html), such as screen size or orientation, changes. | `onConfigurationChanged()`  |
 | Opens and closes the screen sharing with annotations view. | `onScreenSharing()` |
-| Manage the customizable views for the action bar, screen sharing, and annotation callbacks.   | `onScreenSharingStarted()`, `onScreenSharingStopped()`, `onAnnotationsViewReady()`, `onAnnotationsRemoteViewReady()`, `onScreenSharingError()`,  `onClosed()`|
+| Manage the customizable views for the action bar, screen sharing, and annotation callbacks.   | `onScreenSharingStarted()`, `onScreenSharingStopped()`, `onAnnotationsViewReady()`, `onAnnotationsRemoteViewReady()`, `onScreenSharingError()` |
 
 
 ## Requirements
@@ -266,3 +264,4 @@ To develop a screen sharing with annotations app:
 
 1. Install [Android Studio](http://developer.android.com/intl/es/sdk/index.html).
 2. Review the [OpenTok Android SDK Requirements](https://tokbox.com/developer/sdks/android/#developerandclientrequirements).
+3. The device must support Android Lollipop and later.
