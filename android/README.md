@@ -162,8 +162,7 @@ public interface ScreenSharingListener {
     void onScreenSharingStarted();
     void onScreenSharingStopped();
     void onScreenSharingError(String error);
-    void onAnnotationsViewReady(AnnotationsView view);       // publisher view
-    void onAnnotationsRemoteViewReady(AnnotationsView view); // subscriber view
+    void onAnnotationsViewReady(AnnotationsView view); 
 
 }
 ```
@@ -179,7 +178,6 @@ The following `ScreenSharingFragment` methods are the main methods of the Screen
 | Stop screen capture.  | `stop()`  |
 | Set the listener object to monitor state changes.   | `setListener()` |
 | Sets whether annotations are enabled on the specified publisher toolbar.  | `enableAnnotations()`  |
-| Sets whether annotations are enabled on the specified subscriber toolbar.  | `enableRemoteAnnotations()`  |
 
 
 #### Setting the Annotation Toolbar
@@ -211,7 +209,19 @@ For example, the following private method instantiates a `ScreenSharingFragment`
 To enable the annotation toolbar in the Subscriber:
 
 ```java
-     mScreenSharingFragment.enableRemoteAnnotations(true, mAnnotationsToolbar, mRemoteViewContainer, mComm.getRemote());
+     try {
+            AnnotationsView remoteAnnotationsView = new AnnotationsView(this, mComm.getSession(), OpenTokConfig.API_KEY, mComm.getRemote());
+
+            AnnotationsVideoRenderer renderer = new AnnotationsVideoRenderer(this);
+            mComm.getRemote().setRenderer(renderer);
+            remoteAnnotationsView.setVideoRenderer(renderer);
+            remoteAnnotationsView.attachToolbar(mAnnotationsToolbar);
+
+            ((ViewGroup) mRemoteViewContainer).addView(remoteAnnotationsView);
+            mPreviewFragment.enableAnnotations(true);
+        } catch (Exception e) {
+            Log.i(LOG_TAG, "Exception - enableRemoteAnnotations: " + e);
+        }
 ```
 
 #### Capturing and Saving a Screenshot
