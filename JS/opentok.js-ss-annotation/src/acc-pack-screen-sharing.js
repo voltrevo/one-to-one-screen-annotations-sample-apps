@@ -56,8 +56,8 @@
 
   var _setupUI = function (parent) {
     $('body').append(_screenDialogsExtensions);
-    var count =  $(_this._screenSharingControls).children().length;
     var children = $(_this._screenSharingControls).children();
+    var count =  children.length;
     $(_screenSharingControl).insertBefore(children[count-1]);
   };
 
