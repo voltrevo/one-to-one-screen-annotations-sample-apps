@@ -1,5 +1,5 @@
 ![logo](../tokbox-logo.png)
-# OpenTok Screensharing with Annotations Sample for JavaScript<br/>Version 1.1.0
+# OpenTok Screensharing with Annotations Sample App for JavaScript<br/>Version 1.1.0
 
 This document describes how to develop a web-based application that uses the OpenTok Screensharing with Annotations Sample for JavaScript.
 

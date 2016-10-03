@@ -1,17 +1,15 @@
 ![logo](../tokbox-logo.png)
 
-# OpenTok Screensharing with Annotations Sample for iOS<br/>Version 1.1.0
+# OpenTok Screensharing with Annotations Sample App for iOS<br/>Version 1.1.0
 
 ## Quick start
-
-This section shows you how to prepare, build, and run the sample application.
 
 ### Install the project files
 
 Use CocoaPods to install the project files and dependencies.
 
 1. Install CocoaPods as described in [CocoaPods Getting Started](https://guides.cocoapods.org/using/getting-started.html#getting-started).
-1. Add the following line to your pod file: ` pod ‘OTScreenShareKit’  `
+1. Add the following line to your pod file: ` pod 'OTScreenShareKit'  `
 1. In Terminal, `cd` to your project directory and type `pod install`.
 1. Reopen your project using the new `*.xcworkspace` file.
 
@@ -26,7 +24,7 @@ Configure the sample app code. Then, build and run the app.
 	```objc
 	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-		  // Override point for customization after application launch.    
+	    // Override point for customization after application launch.    
 	    [OTScreenSharer setOpenTokApiKey:@""
 	                           sessionId:@""
 	                               token:@""];
