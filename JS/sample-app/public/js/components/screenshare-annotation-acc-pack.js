@@ -467,7 +467,7 @@
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
-  } 
+  }
 
   var _generateUuid = function() {
 
@@ -489,19 +489,19 @@
 
     // init the analytics logs
     var _source = window.location.href;
-    
+
     var _guid = _readCookie('guidAVCommunication')
     if ( !_guid) {
       _createCookie('guidAVCommunication', _generateUuid(), 7);
-    }  
-   
+    }
+
     var otkanalyticsData = {
       clientVersion: _logEventData.clientVersion,
       source: _source,
       componentId: _logEventData.componentId,
       guid: _guid
     };
-    
+
     _otkanalytics = new OTKAnalytics(otkanalyticsData);
     var sessionInfo = {
       sessionId: _session.id,
@@ -510,7 +510,7 @@
     }
 
     _otkanalytics.addSessionInfo(sessionInfo);
-  
+
   };
 
   var _log = function (action, variation) {
@@ -820,7 +820,7 @@
   var _session; // OpenTok session
 
   var _screenSharingControl = [
-    '<div class="video-control circle share-screen" id="startScreenSharing"></div>'
+    '<div class="ots-video-control circle share-screen" id="startScreenSharing"></div>'
   ].join('\n');
 
   var _screenSharingView = [
